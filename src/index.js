@@ -66,7 +66,7 @@ class Board extends React.Component {
 
 	render() {
 		// const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
-		const winner = calculateWinner(this.state.squeres)
+		const winner = calculateWinner(this.state.squares)
 		let status
 		if (winner) {
 			status = 'Winner: ' + winner
@@ -114,10 +114,6 @@ class Game extends React.Component {
 	}
 }
 
-// render all component inte the root id
-const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(<Game />)
-
 // function additional
 function calculateWinner(squares) {
 	const lines = [
@@ -139,3 +135,9 @@ function calculateWinner(squares) {
 	}
 	return null
 }
+
+// render all component inte the root id
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(<Game />)
+
+
