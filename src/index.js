@@ -43,18 +43,6 @@ class Board extends React.Component {
 	// 	}
 	// }
 
-	handleClick(i) {
-		const squares = this.state.squares.slice()
-		if (calculateWinner(squares) || squares[i]) {
-			return
-		}
-		squares[i] = this.state.xIsNext ? 'X' : 'O'
-		this.setState({
-			squares: squares,
-			xIsNext: !this.state.xIsNext,
-		})
-	}
-
 	renderSquare(i) {
 		return (
 			<Square
@@ -76,7 +64,6 @@ class Board extends React.Component {
 
 		return (
 			<div>
-				<div className='status'>{status}</div>
 				<div className='board-row'>
 					{this.renderSquare(0)}
 					{this.renderSquare(1)}
@@ -99,33 +86,50 @@ class Board extends React.Component {
 
 // class game
 class Game extends React.Component {
-constructor(props) {
-  super(props)
-  this.state = {
-    history: [{
-      squares: Array(9).fill(null)
-    }],
-    xIsNext: true
-  }
-}
+	constructor(props) {
+		super(props)
+		this.state = {
+			history: [
+				{
+					squares: Array(9).fill(null),
+				},
+			],
+			xIsNext: true,
+		}
+	}
+	handleClick(i) {
+		const squares = this.state.squares.slice()
+		if (calculateWinner(squares) || squares[i]) {
+			return
+		}
+		squares[i] = this.state.xIsNext ? 'X' : 'O'
+		this.setState({
+			squares: squares,
+			xIsNext: !this.state.xIsNext,
+		})
+	}
 
-  render() {
-    const history = this.state.history
-    const current = history[history.lenght - 1]
-    const winner = calculateWinner(current.squares)
+	render() {
+		const history = this.state.history
+		const current = history[history.lenght - 1]
+		const winner = calculateWinner(current.squares)
 		let status
 		if (winner) {
 			status = 'Winner: ' + winner
 		} else {
+			// eslint-disable-next-line no-unused-vars
 			status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
 		}
 		return (
 			<div className='game'>
 				<div className='game-board'>
-					<Board />
+					<Board
+						squares={current.squares}
+						onClick={(i) => this.handleClick(i)}
+					/>
 				</div>
 				<div className='game-info'>
-					<div> {/* status */} </div>
+					<div> {status} </div>
 					<ol> {/* TODO */} </ol>
 				</div>
 			</div>
@@ -158,5 +162,3 @@ function calculateWinner(squares) {
 // render all component inte the root id
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(<Game />)
-
-
